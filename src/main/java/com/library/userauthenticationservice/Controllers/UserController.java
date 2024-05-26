@@ -9,6 +9,7 @@ import com.library.userauthenticationservice.Models.Token;
 import com.library.userauthenticationservice.Models.User;
 import com.library.userauthenticationservice.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,17 +35,20 @@ public class UserController {
 
     @PostMapping("/login")
     public Token login(@RequestBody LoginRequestDto loginRequestDto){
-        return null;
+        Token token= userService.login(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+        return token;
     }
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@RequestBody LogOutRequestDto logOutRequestDto){
-        return null;
+        userService.logout(logOutRequestDto.getToken());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/validateToken/{token}")
     public UserDto validateToken(@PathVariable String token){
-        return null;
+        User user= userService.validateToken(token);
+        return UserDto.from(user);
     }
 
     @GetMapping("/users/{id}")
